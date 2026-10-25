@@ -3,19 +3,23 @@ package dev.welles.itempickup;
 //? if neoforge {
 /*import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.Objects;
 
 @Mod(value = ItemPickup.MOD_ID, dist = Dist.CLIENT)
 public class ItemPickupNeoForgeClient {
-    public ItemPickupNeoForgeClient(IEventBus modBus) {
+    public ItemPickupNeoForgeClient(IEventBus modBus, ModContainer container) {
         ItemPickupClient.init(new ItemPickupClient.Network() {
             @Override
             public boolean serverSupported() {
@@ -37,6 +41,10 @@ public class ItemPickupNeoForgeClient {
             event.register(ItemPickupClient.PICK_UP);
         });
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> ItemPickupClient.tick(Minecraft.getInstance()));
+        // "Config" button in the mod list
+        container.registerExtensionPoint(IConfigScreenFactory.class, (mod, parent) -> new ConfigScreen(
+            parent, FMLPaths.CONFIGDIR.get().resolve(ItemPickup.MOD_ID + ".properties"), Component.literal(mod.getModInfo().getDisplayName())
+        ));
     }
 }
 *///?}

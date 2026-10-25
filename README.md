@@ -29,6 +29,7 @@ for manual mode to work, since the server decides what a player picks up. Either
 ## Configuration
 
 `config/itempickup.properties` is created on first start. Changes are applied automatically while the game is running.
+On NeoForge it can also be edited in game: *Mods → Item Pickup → Config*.
 `range` is decided by the server: in multiplayer the server's value applies and is sent to the players. All other
 settings only affect the client.
 
