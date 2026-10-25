@@ -17,15 +17,17 @@ import java.util.Properties;
  */
 public final class PickupConfig {
     public PickupMode defaultMode = PickupMode.VANILLA;
+    public boolean outline = true;
 
     private static final String HEADER = """
         Item Pickup configuration
         Changes are picked up automatically, no restart required.
-        The settings only affect the client. The keys are changed in Options > Controls > Key Binds > Gameplay.
+        Both settings only affect the client. The keys are changed in Options > Controls > Key Binds > Gameplay.
 
         defaultMode  Pickup mode when the game starts. vanilla = items are picked up by walking over them
                                                        manual  = look at an item and press the pick up key (right-click by default)
-                     The toggle key switches the mode while playing. Changing this value switches to the new mode immediately.""";
+                     The toggle key switches the mode while playing. Changing this value switches to the new mode immediately.
+        outline      true = outline the item that the pick up key would pick up in manual mode""";
 
     private static Path file;
     private static FileTime loadedAt;
@@ -92,6 +94,8 @@ public final class PickupConfig {
             if (mode != null) defaultMode = mode;
             else ItemPickup.LOGGER.warn("Unknown defaultMode '{}' in {}, using {}", value.trim(), file, defaultMode.id());
         }
+        value = props.getProperty("outline");
+        if (value != null) outline = Boolean.parseBoolean(value.trim());
         return props.keySet().containsAll(toProperties().keySet());
     }
 
@@ -106,6 +110,7 @@ public final class PickupConfig {
     private Map<String, String> toProperties() {
         Map<String, String> props = new LinkedHashMap<>();
         props.put("defaultMode", defaultMode.id());
+        props.put("outline", String.valueOf(outline));
         return props;
     }
 }

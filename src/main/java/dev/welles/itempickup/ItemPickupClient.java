@@ -43,6 +43,7 @@ public final class ItemPickupClient {
     private static Network network;
     private static PickupMode mode;
     private static PickupMode configuredMode;
+    private static boolean outline;
 
     /** The connection and mode the server was last told about. */
     private static ClientPacketListener syncedConnection;
@@ -69,6 +70,7 @@ public final class ItemPickupClient {
 
     public static void tick(Minecraft minecraft) {
         PickupConfig config = PickupConfig.get();
+        outline = config.outline;
         // the configured mode applies on start and whenever it is changed in the file
         if (config.defaultMode != configuredMode) mode = configuredMode = config.defaultMode;
         // no frames are picked without a world
@@ -167,6 +169,11 @@ public final class ItemPickupClient {
             }
         }
         return nearest;
+    }
+
+    /** Whether the entity is the item that the pick up key would pick up and should be outlined. */
+    public static boolean isOutlined(Entity entity) {
+        return target != null && entity == target && outline;
     }
 
     /**
