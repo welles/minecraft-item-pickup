@@ -23,6 +23,7 @@ public final class PickupConfig {
     public PickupMode defaultMode = PickupMode.VANILLA;
     public double range = DEFAULT_RANGE;
     public boolean outline = true;
+    public boolean showName = true;
 
     private static final String HEADER = """
         Item Pickup configuration
@@ -35,7 +36,8 @@ public final class PickupConfig {
                      The toggle key switches the mode while playing. Changing this value switches to the new mode immediately.
         range        How far items can be picked up manually, in blocks around the player's body (sideways; up and down half
                      of it). 1.0 = the area in which vanilla picks up items automatically. 0 to 16.
-        outline      true = outline the item that the pick up key would pick up in manual mode""";
+        outline      true = outline the item that the pick up key would pick up in manual mode
+        showName     true = show the name of that item below the crosshair""";
 
     private static Path file;
     private static FileTime loadedAt;
@@ -110,6 +112,8 @@ public final class PickupConfig {
         }
         value = props.getProperty("outline");
         if (value != null) outline = Boolean.parseBoolean(value.trim());
+        value = props.getProperty("showName");
+        if (value != null) showName = Boolean.parseBoolean(value.trim());
         return props.keySet().containsAll(toProperties().keySet());
     }
 
@@ -136,6 +140,7 @@ public final class PickupConfig {
         props.put("defaultMode", defaultMode.id());
         props.put("range", String.valueOf(range));
         props.put("outline", String.valueOf(outline));
+        props.put("showName", String.valueOf(showName));
         return props;
     }
 }

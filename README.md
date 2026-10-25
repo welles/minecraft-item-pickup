@@ -7,7 +7,8 @@ items lying on the ground.
 - **Manual mode** – walking over items does nothing. Look at an item and press the **pick up key** (right-click by
   default) to pick it up. Holding the key keeps picking up whatever item you look at, so a pile of drops can be
   collected by sweeping over it.
-  - The item that would be picked up is **outlined** like a glowing entity.
+  - The item that would be picked up is **outlined** like a glowing entity and its **name** (and count) is shown in
+    small text below the crosshair.
   - Items can be picked up within a configurable range, by default exactly the area in which vanilla picks up items
     automatically. Solid blocks and entities in between hide them, grass and flowers do not.
   - A click on an item picks it up and does not also use the item in your hand, so you do not place a block on the
@@ -35,6 +36,7 @@ settings only affect the client.
 | `defaultMode` | `vanilla` | Mode when the game starts: `vanilla` or `manual`. Changing the value switches to it immediately.                                                                                                              |
 | `range`       | `1.0`     | How far items can be picked up manually, in blocks around the player's body: sideways the full value, up and down half of it. `1.0` is the area in which vanilla picks up items automatically. `0` to `16`. |
 | `outline`     | `true`    | Outline the item that the pick up key would pick up in manual mode.                                                                                                                                            |
+| `showName`    | `true`    | Show the name of that item below the crosshair.                                                                                                                                                                |
 
 The **toggle key** and the **pick up key** are changed in Minecraft's own key binds: *Options → Controls → Key Binds
 → Gameplay* ("Toggle Item Pickup Mode" and "Pick Up Item"). They are saved in `options.txt` like every other key.

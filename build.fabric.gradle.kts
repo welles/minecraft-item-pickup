@@ -62,7 +62,7 @@ tasks {
         val mixinJava = "JAVA_${requiredJava.majorVersion}"
         val mixins = listOf("ItemEntityAccessor", "ItemEntityMixin").joinToString(", ") { "\"$it\"" }
         val clientMixins = buildList {
-            add("MinecraftMixin")
+            addAll(listOf("GuiMixin", "MinecraftMixin"))
             // The looked at block or entity is picked in the Minecraft class since 26.1
             if (sc.current.parsed < "26.1") add("GameRendererMixin")
             // Vanilla supports several key mappings on the same key since 1.21.9

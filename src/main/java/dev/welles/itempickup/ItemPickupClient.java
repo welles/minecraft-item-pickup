@@ -6,10 +6,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -44,6 +46,7 @@ public final class ItemPickupClient {
     private static PickupMode mode;
     private static PickupMode configuredMode;
     private static boolean outline;
+    private static boolean showName;
     /** The server's pickup range, it sends it when the player switches to manual mode and when it changes. */
     private static double range = PickupConfig.DEFAULT_RANGE;
 
@@ -73,6 +76,7 @@ public final class ItemPickupClient {
     public static void tick(Minecraft minecraft) {
         PickupConfig config = PickupConfig.get();
         outline = config.outline;
+        showName = config.showName;
         // the configured mode applies on start and whenever it is changed in the file
         if (config.defaultMode != configuredMode) mode = configuredMode = config.defaultMode;
         // no frames are picked without a world
@@ -184,6 +188,18 @@ public final class ItemPickupClient {
     /** Whether the entity is the item that the pick up key would pick up and should be outlined. */
     public static boolean isOutlined(Entity entity) {
         return target != null && entity == target && outline;
+    }
+
+    /** The name and count of the item that the pick up key would pick up, shown below the crosshair; null for none. */
+    public static Component targetLabel() {
+        if (target == null || !showName) return null;
+        ItemStack stack = target.getItem();
+        //? if >=1.21.4 {
+        /*MutableComponent label = Component.empty().append(stack.getStyledHoverName());
+        *///?} else {
+        MutableComponent label = Component.empty().append(stack.getHoverName().copy().withStyle(stack.getRarity().color()));
+        //?}
+        return stack.getCount() > 1 ? label.append(" ×" + stack.getCount()) : label;
     }
 
     /**

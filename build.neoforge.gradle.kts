@@ -63,7 +63,7 @@ tasks {
         val mixins = listOf("ItemEntityAccessor", "ItemEntityMixin").joinToString(", ") { "\"$it\"" }
         // NeoForge supports several key mappings on the same key, so KeyMappingMixin is not needed
         val clientMixins = buildList {
-            add("MinecraftMixin")
+            addAll(listOf("GuiMixin", "MinecraftMixin"))
             // The looked at block or entity is picked in the Minecraft class since 26.1
             if (sc.current.parsed < "26.1") add("GameRendererMixin")
         }.joinToString(", ") { "\"$it\"" }
