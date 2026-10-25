@@ -9,6 +9,11 @@
   ],
   "license": "MIT",
   "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.welles.itempickup.ItemPickupFabric"
+    ]
+  },
   "depends": {
     "fabricloader": ">=${loader}",
     "fabric-api": "*",
