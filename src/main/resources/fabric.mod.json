@@ -12,8 +12,14 @@
   "entrypoints": {
     "main": [
       "dev.welles.itempickup.ItemPickupFabric"
+    ],
+    "client": [
+      "dev.welles.itempickup.ItemPickupFabricClient"
     ]
   },
+  "mixins": [
+    "itempickup.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=${loader}",
     "fabric-api": "*",

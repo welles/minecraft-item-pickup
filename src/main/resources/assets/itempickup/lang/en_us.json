@@ -1,0 +1,7 @@
+{
+  "key.itempickup.toggle_mode": "Toggle Item Pickup Mode",
+  "key.itempickup.pick_up": "Pick Up Item",
+  "itempickup.mode.vanilla": "Item pickup: Vanilla",
+  "itempickup.mode.manual": "Item pickup: Manual (%s)",
+  "itempickup.mode.unavailable": "Manual item pickup is not available on this server"
+}

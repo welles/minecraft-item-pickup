@@ -1,0 +1,7 @@
+{
+  "key.itempickup.toggle_mode": "Aufsammel-Modus wechseln",
+  "key.itempickup.pick_up": "Gegenstand aufheben",
+  "itempickup.mode.vanilla": "Aufsammeln: Vanilla",
+  "itempickup.mode.manual": "Aufsammeln: Manuell (%s)",
+  "itempickup.mode.unavailable": "Manuelles Aufsammeln ist auf diesem Server nicht verfügbar"
+}

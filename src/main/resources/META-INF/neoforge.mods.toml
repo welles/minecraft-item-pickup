@@ -10,6 +10,9 @@ version = "${version}"
 authors = "Nico Welles"
 description = "Choose between vanilla item pickup and manual pickup: look at an item on the ground and press a key (right-click by default) to pick it up. The targeted item is outlined."
 
+[[mixins]]
+config = "itempickup.mixins.json"
+
 [[dependencies.${id}]]
 modId = "minecraft"
 type = "required"
