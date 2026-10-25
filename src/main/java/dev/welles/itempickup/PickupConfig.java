@@ -16,8 +16,8 @@ import java.util.Properties;
  * The file is re-read automatically whenever it changes on disk.
  */
 public final class PickupConfig {
-    /** Vanilla picks up items touching the player's bounding box grown by 1 block sideways and 0.5 up and down. */
-    public static final double DEFAULT_RANGE = 1.0;
+    /** 2 blocks sideways and 1 up and down; vanilla picks up items within 1 block sideways and 0.5 up and down. */
+    public static final double DEFAULT_RANGE = 2.0;
     public static final double MAX_RANGE = 16.0;
 
     public PickupMode defaultMode = PickupMode.VANILLA;

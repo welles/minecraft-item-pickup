@@ -9,8 +9,9 @@ items lying on the ground.
   collected by sweeping over it.
   - The item that would be picked up is **outlined** like a glowing entity and its **name** (and count) is shown in
     small text below the crosshair.
-  - Items can be picked up within a configurable range, by default exactly the area in which vanilla picks up items
-    automatically. Solid blocks and entities in between hide them, grass and flowers do not.
+  - Items can be picked up within a configurable range, by default 2 blocks around the player (twice the area in
+    which vanilla picks up items automatically). Solid blocks and entities in between hide them, grass and flowers
+    do not.
   - A click on an item picks it up and does not also use the item in your hand, so you do not place a block on the
     floor by accident. Everywhere else right-click works as usual.
   - Full inventories, items that belong to another player and items that can never be picked up behave like in
@@ -34,7 +35,7 @@ settings only affect the client.
 | Key           | Default   | Description                                                                                                                                                                                                    |
 |---------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `defaultMode` | `vanilla` | Mode when the game starts: `vanilla` or `manual`. Changing the value switches to it immediately.                                                                                                              |
-| `range`       | `1.0`     | How far items can be picked up manually, in blocks around the player's body: sideways the full value, up and down half of it. `1.0` is the area in which vanilla picks up items automatically. `0` to `16`. |
+| `range`       | `2.0`     | How far items can be picked up manually, in blocks around the player's body: sideways the full value, up and down half of it. `1.0` is the area in which vanilla picks up items automatically. `0` to `16`. |
 | `outline`     | `true`    | Outline the item that the pick up key would pick up in manual mode.                                                                                                                                            |
 | `showName`    | `true`    | Show the name of that item below the crosshair.                                                                                                                                                                |
 
