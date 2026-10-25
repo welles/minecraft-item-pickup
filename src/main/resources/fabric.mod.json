@@ -15,6 +15,9 @@
     ],
     "client": [
       "dev.welles.itempickup.ItemPickupFabricClient"
+    ],
+    "modmenu": [
+      "dev.welles.itempickup.ItemPickupModMenu"
     ]
   },
   "mixins": [

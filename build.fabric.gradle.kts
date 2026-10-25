@@ -11,6 +11,11 @@ val requiredJava: JavaVersion = when {
     else -> JavaVersion.VERSION_21
 }
 
+repositories {
+    // Mod Menu
+    maven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:${sc.current.version}")
     // Applies Mojang Mappings on obfuscated versions
@@ -20,6 +25,8 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
     // Key mappings, client ticks and networking between the client and the server
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    // Config button in Mod Menu, only used when Mod Menu is installed
+    modCompileOnly("com.terraformersmc:modmenu:${property("deps.modmenu")}") { isTransitive = false }
 }
 
 loom {
