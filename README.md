@@ -8,8 +8,8 @@ items lying on the ground.
   default) to pick it up. Holding the key keeps picking up whatever item you look at, so a pile of drops can be
   collected by sweeping over it.
   - The item that would be picked up is **outlined** like a glowing entity.
-  - Items can be picked up within block reach. Solid blocks and entities in between hide them, grass and flowers do
-    not.
+  - Items can be picked up within a configurable range, by default exactly the area in which vanilla picks up items
+    automatically. Solid blocks and entities in between hide them, grass and flowers do not.
   - A click on an item picks it up and does not also use the item in your hand, so you do not place a block on the
     floor by accident. Everywhere else right-click works as usual.
   - Full inventories, items that belong to another player and items that can never be picked up behave like in
@@ -27,12 +27,14 @@ for manual mode to work, since the server decides what a player picks up. Either
 ## Configuration
 
 `config/itempickup.properties` is created on first start. Changes are applied automatically while the game is running.
-Both settings only affect the client.
+`range` is decided by the server: in multiplayer the server's value applies and is sent to the players. All other
+settings only affect the client.
 
-| Key           | Default   | Description                                                                                      |
-|---------------|-----------|--------------------------------------------------------------------------------------------------|
-| `defaultMode` | `vanilla` | Mode when the game starts: `vanilla` or `manual`. Changing the value switches to it immediately. |
-| `outline`     | `true`    | Outline the item that the pick up key would pick up in manual mode.                              |
+| Key           | Default   | Description                                                                                                                                                                                                    |
+|---------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `defaultMode` | `vanilla` | Mode when the game starts: `vanilla` or `manual`. Changing the value switches to it immediately.                                                                                                              |
+| `range`       | `1.0`     | How far items can be picked up manually, in blocks around the player's body: sideways the full value, up and down half of it. `1.0` is the area in which vanilla picks up items automatically. `0` to `16`. |
+| `outline`     | `true`    | Outline the item that the pick up key would pick up in manual mode.                                                                                                                                            |
 
 The **toggle key** and the **pick up key** are changed in Minecraft's own key binds: *Options → Controls → Key Binds
 → Gameplay* ("Toggle Item Pickup Mode" and "Pick Up Item"). They are saved in `options.txt` like every other key.

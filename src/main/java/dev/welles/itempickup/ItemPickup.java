@@ -1,9 +1,12 @@
 package dev.welles.itempickup;
 
 import dev.welles.itempickup.mixin.ItemEntityAccessor;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +14,7 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 //? if >=1.21.11 {
 /*import net.minecraft.resources.Identifier;
@@ -22,7 +26,7 @@ public final class ItemPickup {
     public static final String MOD_ID = "itempickup";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    /** Extra distance beyond the block interaction range, so lag does not make pickups fail. */
+    /** Extra distance beyond the pickup range, so lag and movement do not make pickups fail. */
     private static final double RANGE_TOLERANCE = 1.0;
     /** Pickup delay of items that can never be picked up, see {@code ItemEntity#setNeverPickUp}. */
     private static final int NEVER_PICK_UP = 32767;
@@ -31,10 +35,15 @@ public final class ItemPickup {
     private static final Set<UUID> MANUAL_PLAYERS = new HashSet<>();
     /** The player that is picking up an item manually right now. */
     private static Player pickingUp;
+    /** The range last sent to the players in manual mode. */
+    private static double sentRange = Double.NaN;
+    /** Loader specific: sends a payload to a player. */
+    private static BiConsumer<ServerPlayer, CustomPacketPayload> sender;
 
     private ItemPickup() {}
 
-    public static void init(Path configDir) {
+    public static void init(Path configDir, BiConsumer<ServerPlayer, CustomPacketPayload> sender) {
+        ItemPickup.sender = sender;
         PickupConfig.init(configDir);
         LOGGER.info("Item Pickup loaded");
     }
@@ -49,13 +58,33 @@ public final class ItemPickup {
     }
     //?}
 
+    /** The area in which the player can pick up items, like vanilla's pickup area grown by the range. */
+    public static AABB reach(Player player, double range) {
+        return player.getBoundingBox().inflate(range, range / 2, range);
+    }
+
     public static void setMode(ServerPlayer player, PickupMode mode) {
-        if (mode == PickupMode.MANUAL) MANUAL_PLAYERS.add(player.getUUID());
-        else MANUAL_PLAYERS.remove(player.getUUID());
+        if (mode == PickupMode.MANUAL) {
+            MANUAL_PLAYERS.add(player.getUUID());
+            sender.accept(player, new RangePayload(PickupConfig.get().range));
+        } else {
+            MANUAL_PLAYERS.remove(player.getUUID());
+        }
     }
 
     public static void onDisconnect(ServerPlayer player) {
         MANUAL_PLAYERS.remove(player.getUUID());
+    }
+
+    /** Sends a changed range to the players in manual mode. */
+    public static void onServerTick(MinecraftServer server) {
+        double range = PickupConfig.get().range;
+        if (range == sentRange) return;
+        sentRange = range;
+        for (UUID id : MANUAL_PLAYERS) {
+            ServerPlayer player = server.getPlayerList().getPlayer(id);
+            if (player != null) sender.accept(player, new RangePayload(range));
+        }
     }
 
     /** Whether the player picks up items by touching them, like in vanilla. */
@@ -72,8 +101,7 @@ public final class ItemPickup {
         if (!player.isAlive() || player.isSpectator()) return;
         if (!(player.level().getEntity(entityId) instanceof ItemEntity item) || !item.isAlive()) return;
 
-        double range = player.blockInteractionRange() + RANGE_TOLERANCE;
-        if (item.getBoundingBox().distanceToSqr(player.getEyePosition()) > range * range) return;
+        if (!item.getBoundingBox().intersects(reach(player, PickupConfig.get().range).inflate(RANGE_TOLERANCE))) return;
 
         int delay = ((ItemEntityAccessor) item).itempickup$getPickupDelay();
         if (delay == NEVER_PICK_UP) return;

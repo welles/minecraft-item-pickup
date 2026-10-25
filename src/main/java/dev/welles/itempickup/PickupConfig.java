@@ -16,17 +16,25 @@ import java.util.Properties;
  * The file is re-read automatically whenever it changes on disk.
  */
 public final class PickupConfig {
+    /** Vanilla picks up items touching the player's bounding box grown by 1 block sideways and 0.5 up and down. */
+    public static final double DEFAULT_RANGE = 1.0;
+    public static final double MAX_RANGE = 16.0;
+
     public PickupMode defaultMode = PickupMode.VANILLA;
+    public double range = DEFAULT_RANGE;
     public boolean outline = true;
 
     private static final String HEADER = """
         Item Pickup configuration
         Changes are picked up automatically, no restart required.
-        Both settings only affect the client. The keys are changed in Options > Controls > Key Binds > Gameplay.
+        range is decided by the server (in multiplayer the server's value applies), all other settings only affect the client.
+        The keys are changed in Options > Controls > Key Binds > Gameplay.
 
         defaultMode  Pickup mode when the game starts. vanilla = items are picked up by walking over them
                                                        manual  = look at an item and press the pick up key (right-click by default)
                      The toggle key switches the mode while playing. Changing this value switches to the new mode immediately.
+        range        How far items can be picked up manually, in blocks around the player's body (sideways; up and down half
+                     of it). 1.0 = the area in which vanilla picks up items automatically. 0 to 16.
         outline      true = outline the item that the pick up key would pick up in manual mode""";
 
     private static Path file;
@@ -94,9 +102,25 @@ public final class PickupConfig {
             if (mode != null) defaultMode = mode;
             else ItemPickup.LOGGER.warn("Unknown defaultMode '{}' in {}, using {}", value.trim(), file, defaultMode.id());
         }
+        value = props.getProperty("range");
+        if (value != null) {
+            double parsed = parseRange(value);
+            if (!Double.isNaN(parsed)) range = parsed;
+            else ItemPickup.LOGGER.warn("Invalid range '{}' in {}, using {}", value.trim(), file, range);
+        }
         value = props.getProperty("outline");
         if (value != null) outline = Boolean.parseBoolean(value.trim());
         return props.keySet().containsAll(toProperties().keySet());
+    }
+
+    /** Parses a range clamped to 0 to {@link #MAX_RANGE}, returns NaN if it is not a number. */
+    private static double parseRange(String value) {
+        try {
+            double range = Double.parseDouble(value.trim());
+            return Double.isNaN(range) ? Double.NaN : Math.clamp(range, 0.0, MAX_RANGE);
+        } catch (NumberFormatException e) {
+            return Double.NaN;
+        }
     }
 
     private void write(Writer writer) throws IOException {
@@ -110,6 +134,7 @@ public final class PickupConfig {
     private Map<String, String> toProperties() {
         Map<String, String> props = new LinkedHashMap<>();
         props.put("defaultMode", defaultMode.id());
+        props.put("range", String.valueOf(range));
         props.put("outline", String.valueOf(outline));
         return props;
     }

@@ -44,6 +44,8 @@ public final class ItemPickupClient {
     private static PickupMode mode;
     private static PickupMode configuredMode;
     private static boolean outline;
+    /** The server's pickup range, it sends it when the player switches to manual mode and when it changes. */
+    private static double range = PickupConfig.DEFAULT_RANGE;
 
     /** The connection and mode the server was last told about. */
     private static ClientPacketListener syncedConnection;
@@ -114,10 +116,16 @@ public final class ItemPickupClient {
             return;
         }
         if ((connection != syncedConnection || mode != syncedMode) && network.serverSupported()) {
+            // a new server sends its own range
+            if (connection != syncedConnection) range = PickupConfig.DEFAULT_RANGE;
             network.send(new ModePayload(mode));
             syncedConnection = connection;
             syncedMode = mode;
         }
+    }
+
+    public static void setRange(double range) {
+        ItemPickupClient.range = range;
     }
 
     private static boolean serverSupported(Minecraft minecraft) {
@@ -140,14 +148,15 @@ public final class ItemPickupClient {
         target = mode == PickupMode.MANUAL && serverSupported(minecraft) ? findTarget(minecraft, partialTick) : null;
     }
 
-    /** The nearest item along the line of sight within block interaction range. */
+    /** The nearest item along the line of sight within the pickup range. */
     private static ItemEntity findTarget(Minecraft minecraft, float partialTick) {
         Entity camera = minecraft.getCameraEntity();
         LocalPlayer player = minecraft.player;
         if (camera == null || player == null || minecraft.level == null || player.isSpectator()) return null;
 
         Vec3 eye = camera.getEyePosition(partialTick);
-        Vec3 end = eye.add(camera.getViewVector(partialTick).scale(player.blockInteractionRange()));
+        // long enough to leave the pickup area in every direction
+        Vec3 end = eye.add(camera.getViewVector(partialTick).scale(2 * range + 3));
         // Solid blocks hide items behind them, grass and flowers do not
         double maxDistance = eye.distanceToSqr(minecraft.level.clip(
             new ClipContext(eye, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, camera)
@@ -158,7 +167,8 @@ public final class ItemPickupClient {
         }
 
         ItemEntity nearest = null;
-        for (ItemEntity item : minecraft.level.getEntitiesOfClass(ItemEntity.class, new AABB(eye, end).inflate(TARGET_MARGIN), Entity::isAlive)) {
+        // Only items in the pickup area, it is checked like vanilla checks the area in which it picks up items
+        for (ItemEntity item : minecraft.level.getEntitiesOfClass(ItemEntity.class, ItemPickup.reach(player, range), Entity::isAlive)) {
             AABB box = item.getBoundingBox().inflate(TARGET_MARGIN);
             Optional<Vec3> hit = box.contains(eye) ? Optional.of(eye) : box.clip(eye, end);
             if (hit.isEmpty()) continue;

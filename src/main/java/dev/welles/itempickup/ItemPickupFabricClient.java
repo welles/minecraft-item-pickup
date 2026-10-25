@@ -26,6 +26,8 @@ public class ItemPickupFabricClient implements ClientModInitializer {
                 ClientPlayNetworking.send(payload);
             }
         });
+        // Handlers run on the client thread
+        ClientPlayNetworking.registerGlobalReceiver(RangePayload.TYPE, (payload, context) -> ItemPickupClient.setRange(payload.range()));
 
         //? if >=26.1 {
         /*KeyMappingHelper.registerKeyMapping(ItemPickupClient.TOGGLE_MODE);
