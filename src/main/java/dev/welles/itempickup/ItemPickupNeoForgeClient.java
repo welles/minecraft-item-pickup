@@ -43,7 +43,8 @@ public class ItemPickupNeoForgeClient {
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> ItemPickupClient.tick(Minecraft.getInstance()));
         // "Config" button in the mod list
         container.registerExtensionPoint(IConfigScreenFactory.class, (mod, parent) -> new ConfigScreen(
-            parent, FMLPaths.CONFIGDIR.get().resolve(ItemPickup.MOD_ID + ".properties"), Component.literal(mod.getModInfo().getDisplayName())
+            parent, FMLPaths.CONFIGDIR.get().resolve(ItemPickup.MOD_ID + ".properties"), Component.literal(mod.getModInfo().getDisplayName()),
+            PickupConfig.defaults(), PickupConfig.RANGES, PickupConfig.CHOICES
         ));
     }
 }

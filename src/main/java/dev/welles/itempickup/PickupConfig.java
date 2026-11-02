@@ -7,7 +7,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -16,9 +18,17 @@ import java.util.Properties;
  * The file is re-read automatically whenever it changes on disk.
  */
 public final class PickupConfig {
+    /** The allowed values of each number setting; values outside are clamped. */
+    public static final Map<String, Range> RANGES = Map.of(
+        "range", new Range(0.0, 16.0)
+    );
+    /** The allowed values of each setting with a fixed set of them. */
+    public static final Map<String, List<String>> CHOICES = Map.of(
+        "defaultMode", Arrays.stream(PickupMode.values()).map(PickupMode::id).toList()
+    );
+
     /** 2 blocks sideways and 1 up and down; vanilla picks up items within 1 block sideways and 0.5 up and down. */
     public static final double DEFAULT_RANGE = 2.0;
-    public static final double MAX_RANGE = 16.0;
 
     public PickupMode defaultMode = PickupMode.VANILLA;
     public double range = DEFAULT_RANGE;
@@ -117,11 +127,11 @@ public final class PickupConfig {
         return props.keySet().containsAll(toProperties().keySet());
     }
 
-    /** Parses a range clamped to 0 to {@link #MAX_RANGE}, returns NaN if it is not a number. */
+    /** Parses a range clamped to its allowed values, returns NaN if it is not a number. */
     private static double parseRange(String value) {
         try {
             double range = Double.parseDouble(value.trim());
-            return Double.isNaN(range) ? Double.NaN : Math.clamp(range, 0.0, MAX_RANGE);
+            return Double.isNaN(range) ? Double.NaN : RANGES.get("range").clamp(range);
         } catch (NumberFormatException e) {
             return Double.NaN;
         }
@@ -135,6 +145,11 @@ public final class PickupConfig {
         }
     }
 
+    /** The default value of every setting, as written to the file. */
+    public static Map<String, String> defaults() {
+        return new PickupConfig().toProperties();
+    }
+
     private Map<String, String> toProperties() {
         Map<String, String> props = new LinkedHashMap<>();
         props.put("defaultMode", defaultMode.id());
@@ -142,5 +157,15 @@ public final class PickupConfig {
         props.put("outline", String.valueOf(outline));
         props.put("showName", String.valueOf(showName));
         return props;
+    }
+
+    public record Range(double min, double max) {
+        public double clamp(double value) {
+            return Math.clamp(value, min, max);
+        }
+
+        public boolean contains(double value) {
+            return value >= min && value <= max;
+        }
     }
 }

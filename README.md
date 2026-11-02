@@ -31,6 +31,8 @@ for manual mode to work, since the server decides what a player picks up. Either
 `config/itempickup.properties` is created on first start. Changes are applied automatically while the game is running.
 It can also be edited in game: on NeoForge in *Mods → Item Pickup → Config*, on Fabric through
 [Mod Menu](https://modrinth.com/mod/modmenu).
+Invalid values, such as numbers outside their range, are marked red and cannot be saved; every value can be reset to
+its default, one at a time or all at once.
 `range` is decided by the server: in multiplayer the server's value applies and is sent to the players. All other
 settings only affect the client.
 

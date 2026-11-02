@@ -13,7 +13,10 @@ public class ItemPickupModMenu implements ModMenuApi {
         return parent -> new ConfigScreen(
             parent,
             FabricLoader.getInstance().getConfigDir().resolve(ItemPickup.MOD_ID + ".properties"),
-            Component.literal(FabricLoader.getInstance().getModContainer(ItemPickup.MOD_ID).map(mod -> mod.getMetadata().getName()).orElse(ItemPickup.MOD_ID))
+            Component.literal(FabricLoader.getInstance().getModContainer(ItemPickup.MOD_ID).map(mod -> mod.getMetadata().getName()).orElse(ItemPickup.MOD_ID)),
+            PickupConfig.defaults(),
+            PickupConfig.RANGES,
+            PickupConfig.CHOICES
         );
     }
 }
