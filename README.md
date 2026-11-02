@@ -1,3 +1,5 @@
+<img src="src/main/resources/assets/itempickup/icon.png" alt="" width="128" align="right">
+
 # Item Pickup
 
 A Minecraft mod for **Fabric** and **NeoForge** (Minecraft 1.21.1 – 26.3) that lets players choose how they pick up

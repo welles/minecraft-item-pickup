@@ -4,6 +4,7 @@
   "version": "${version}",
   "name": "${name}",
   "description": "Choose between vanilla item pickup and manual pickup: look at an item on the ground and press a key (right-click by default) to pick it up. The targeted item is outlined.",
+  "icon": "assets/${id}/icon.png",
   "authors": [
     "Nico Welles"
   ],
