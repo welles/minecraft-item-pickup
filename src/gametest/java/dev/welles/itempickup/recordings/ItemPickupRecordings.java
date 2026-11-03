@@ -127,11 +127,11 @@ public class ItemPickupRecordings implements FabricClientGameTest {
         recorder.frames(10);
         context.getInput().pressKey(ItemPickupClient.TOGGLE_MODE);
         recorder.frames(30);
-        walk(recorder, context, options -> options.keyLeft, 15);
+        walk(recorder, context, options -> options.keyLeft, 30);
         recorder.frames(10);
         context.getInput().pressKey(ItemPickupClient.TOGGLE_MODE);
         recorder.frames(30);
-        walk(recorder, context, options -> options.keyRight, 15);
+        walk(recorder, context, options -> options.keyRight, 30);
         recorder.frames(25);
         context.runOnClient(minecraft -> minecraft.options.setCameraType(CameraType.FIRST_PERSON));
     }
@@ -163,7 +163,7 @@ public class ItemPickupRecordings implements FabricClientGameTest {
         }
     }
 
-    /** Saves numbered frames of one scene, advancing the game by one tick after each. */
+    /** Saves numbered frames of one scene; taking a screenshot advances the game by one tick. */
     private static final class Recorder {
         private final ClientGameTestContext context;
         private final Path dir;
@@ -182,7 +182,6 @@ public class ItemPickupRecordings implements FabricClientGameTest {
             });
             context.takeScreenshot(TestScreenshotOptions.of(String.format(Locale.ROOT, "%04d", frame++))
                 .disableCounterPrefix().withSize(WIDTH, HEIGHT).withDestinationDir(dir));
-            context.waitTick();
         }
 
         void frames(int count) {
