@@ -1,5 +1,5 @@
 ---
-summary: Pick up only what you want: look at an item, click, done – no more inventories full of junk.
+summary: Pick up only what you want: look at an item, click, done – no more inventories full of junk. Switch between vanilla and manual pickup with one key, with a highlighted target and its name below the crosshair.
 ---
 
 > ⚠️ **This project is AI-generated.** The code, this description and the icon of this mod were created with generative AI (Claude by Anthropic), directed by the author. Please keep that in mind, and report any problems on GitHub.
