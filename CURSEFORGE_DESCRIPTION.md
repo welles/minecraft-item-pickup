@@ -17,6 +17,10 @@ Choose how you pick up items lying on the ground: automatically like in vanilla,
   - Clicking an item does not also use the item in your hand, so you do not place a block on the floor by accident.
 - **Toggle key** (`K` by default) switches between both modes while playing.
 
+![Picking up items one by one in manual mode](https://raw.githubusercontent.com/welles/minecraft-item-pickup/main/media/manual-sweep.gif)
+
+![Walking over items in manual and vanilla mode](https://raw.githubusercontent.com/welles/minecraft-item-pickup/main/media/walk-over.gif)
+
 Both keys can be changed in *Options → Controls → Key Binds → Gameplay*.
 
 ## Installation

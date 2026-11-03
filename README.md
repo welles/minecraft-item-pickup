@@ -20,6 +20,10 @@ items lying on the ground.
     vanilla. Only the short pickup delay of freshly dropped items is skipped.
 - **Toggle key** (`K` by default) switches between both modes while playing. The new mode is shown above the hotbar.
 
+| Manual mode: look at an item, see its outline and name, click to pick it up | Walking over items: they stay in manual mode, vanilla mode picks them up |
+|---|---|
+| ![Picking up items one by one in manual mode](media/manual-sweep.gif) | ![Walking over items in manual and vanilla mode](media/walk-over.gif) |
+
 ## Installation
 
 The mod is needed on the **client** to use manual mode and on the **server** (or in singleplayer, which runs both)

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "itempickup-recordings",
+  "version": "1.0.0",
+  "name": "Item Pickup recordings",
+  "description": "Plays scenes of Item Pickup in a client game test and saves every frame, to make GIFs of the mod in action.",
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-client-gametest": [
+      "dev.welles.itempickup.recordings.ItemPickupRecordings"
+    ]
+  },
+  "depends": {
+    "itempickup": "*"
+  }
+}
