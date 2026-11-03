@@ -32,7 +32,11 @@ plays each scene in a headless Minecraft and saves every tick as a frame:
     nix-shell --run scripts/record-gifs.sh
 
 Record them again and check a few frames whenever a change affects what the scenes show (outline, label, messages,
-keys, pickup behaviour). Keep the GIFs small: a calm floor, 480 pixels wide, no dithering.
+keys, pickup behaviour).
+
+Every GIF must be at most 2 MB (2,000,000 bytes), CurseForge does not accept larger ones. The script picks the best
+frame rate and palette that fit and fails otherwise; then shorten the scene or calm it down (a plain floor, few
+camera moves) rather than lowering the limit.
 
 ## Releases
 
